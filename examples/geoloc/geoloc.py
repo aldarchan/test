@@ -78,7 +78,8 @@ def main():
         p = None
         for p in procs:
             try:
-                m = p(identifier, payload, gi)
+                dest_ip = dl[identifier]
+                m = p(identifier, payload, gi, dest_ip)
             except Exception, e:
                 print "invalid message %s" % payload
                 traceback.print_exc(file=sys.stdout)
