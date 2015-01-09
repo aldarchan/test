@@ -25,7 +25,7 @@ def get_addr_family(addr):
         ainfo = socket.getaddrinfo(addr, 1, socket.AF_UNSPEC, socket.SOCK_STREAM)
         return ainfo[0][0]
 
-def glastopf_event(identifier, payload, gi):
+def glastopf_event(identifier, payload, gi, dest_ip):
     try:
         dec = ezdict(json.loads(str(payload)))
     except:
@@ -36,9 +36,9 @@ def glastopf_event(identifier, payload, gi):
     if dec.pattern == 'unknown': 
         return None
 
-    return create_message('glastopf.events', identifier, gi, src_ip=dec.source[0], dst_ip=None)
+    return create_message('glastopf.events', identifier, gi, src_ip=dec.source[0], dst_ip=dest_ip)
 
-def dionaea_capture(identifier, payload, gi):
+def dionaea_capture(identifier, payload, gi, dest_ip):
     try:
         dec = ezdict(json.loads(str(payload)))
     except:
