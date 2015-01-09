@@ -45,36 +45,44 @@ def dionaea_capture(identifier, payload, gi, dest_ip):
         print 'exception processing dionaea event'
         traceback.print_exc()
         return
-    return create_message('dionaea.capture', identifier, gi, src_ip=dec.saddr, dst_ip=dec.daddr)
+    if dec.daddr == None: dst_ip = dest_ip
+    else: dst_ip = dec.daddr
+    return create_message('dionaea.capture', identifier, gi, src_ip=dec.saddr, dst_ip)
 
-def dionaea_connections(identifier, payload, gi):
+def dionaea_connections(identifier, payload, gi, dest_ip):
     try:
         dec = ezdict(json.loads(str(payload)))
     except:
         print 'exception processing dionaea connection'
         traceback.print_exc()
         return
-    return create_message('dionaea.connections', identifier, gi, src_ip=dec.remote_host, dst_ip=dec.local_host)
+    if dec.local_host == None: dst_ip = dest_ip
+    else: dst_ip = dec.local_host
+    return create_message('dionaea.connections', identifier, gi, src_ip=dec.remote_host, dst_ip)
 
-def beeswarm_hive(identifier, payload, gi):
+def beeswarm_hive(identifier, payload, gi, dest_ip):
     try:
         dec = ezdict(json.loads(str(payload)))
     except:
         print 'exception processing beeswarm.hive event'
         traceback.print_exc()
         return
-    return create_message('beeswarm.hive', identifier, gi, src_ip=dec.attacker_ip, dst_ip=dec.honey_ip)
+    if dec.honey_ip == None: dst_ip = dest_ip
+    else: dst_ip = dec.honey_ip
+    return create_message('beeswarm.hive', identifier, gi, src_ip=dec.attacker_ip, dst_ip)
 
-def kippo_sessions(identifier, payload, gi):
+def kippo_sessions(identifier, payload, gi, dest_ip):
     try:
         dec = ezdict(json.loads(str(payload)))
     except:
         print 'exception processing kippo event'
         traceback.print_exc()
         return
-    return create_message('kippo.sessions', identifier, gi, src_ip=dec.peerIP, dst_ip=dec.hostIP)
+    if dec.hostIP == None: dst_ip = dest_ip
+    else: dst_ip = dec.hostIP
+    return create_message('kippo.sessions', identifier, gi, src_ip=dec.peerIP, dst_ip)
 
-def conpot_events(identifier, payload, gi):
+def conpot_events(identifier, payload, gi, dest_ip):
     try:
         dec = ezdict(json.loads(str(payload)))
         remote = dec.remote[0]
@@ -86,34 +94,42 @@ def conpot_events(identifier, payload, gi):
         print 'exception processing conpot event'
         traceback.print_exc()
         return
+    if dec.public_ip == None: dst_ip = dest_ip
+    else: dst_ip = dec.public_ip
 
-    return create_message('conpot.events-'+dec.data_type, identifier, gi, src_ip=dec.remote, dst_ip=dec.public_ip)
+    return create_message('conpot.events-'+dec.data_type, identifier, gi, src_ip=dec.remote, dst_ip)
 
-def snort_alerts(identifier, payload, gi):
+def snort_alerts(identifier, payload, gi, dest_ip):
     try:
         dec = ezdict(json.loads(str(payload)))
     except:
         print 'exception processing snort alert'
         traceback.print_exc()
         return None
-    return create_message('snort.alerts', identifier, gi, src_ip=dec.source_ip, dst_ip=dec.destination_ip)
+    if dec.destination_ip == None: dst_ip = dest_ip
+    else dst_ip = dec.destination_ip
+    return create_message('snort.alerts', identifier, gi, src_ip=dec.source_ip, dst_ip)
 
-def suricata_events(identifier, payload, gi):
+def suricata_events(identifier, payload, gi, dest_ip):
     try:
         dec = ezdict(json.loads(str(payload)))
     except:
         print 'exception processing suricata event'
         traceback.print_exc()
         return None
-    return create_message('suricata.events', identifier, gi, src_ip=dec.source_ip, dst_ip=dec.destination_ip)
+    if dec.destination_ip == None: dst_ip = dest_ip
+    else dst_ip = dec.destination_ip
+    return create_message('suricata.events', identifier, gi, src_ip=dec.source_ip, dst_ip)
 
-def amun_events(identifier, payload, gi):
+def amun_events(identifier, payload, gi, dest_ip):
     try:
         dec = ezdict(json.loads(str(payload)))
     except:
         print 'exception processing amun event'
         traceback.print_exc()
         return
+    if dec.victimIP == None: dst_ip = dest_ip
+    else: dst_ip = dec.victimIP
     return create_message('amun.events', identifier, gi, src_ip=dec.attackerIP, dst_ip=dec.victimIP)
 
 def wordpot_event(identifier, payload, gi):
