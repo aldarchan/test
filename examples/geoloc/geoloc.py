@@ -33,6 +33,7 @@ if len(sys.argv) > 1:
     print >>sys.stderr, "Parsing config file: %s"%sys.argv[1]
     import json
     config = json.load(file(sys.argv[1]))
+    dstlookup = json.load(file(sys.argv[2]))
     HOST        = config["HOST"]
     PORT        = config["PORT"]
     # hpfeeds protocol has trouble with unicode, hence the utf-8 encoding here
@@ -77,7 +78,7 @@ def main():
         p = None
         for p in procs:
             try:
-                m = p(identifier, payload, gi)
+                m = p(identifier, payload, gi, dstlookup)
             except Exception, e:
                 print "invalid message %s" % payload
                 traceback.print_exc(file=sys.stdout)
